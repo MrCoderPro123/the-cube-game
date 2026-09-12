@@ -41,6 +41,18 @@ theme_override_font_sizes/font_size = 72
 text = "The Cube"
 horizontal_alignment = 1
 
+[node name="Version Text" type="Label" parent="BG" unique_id=1177778607]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -23.0
+offset_right = 33.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 16
+text = "V1.2"
+vertical_alignment = 2
+
 [node name="PlayBtn" type="Button" parent="BG" unique_id=1195607653]
 layout_mode = 1
 anchors_preset = 8
