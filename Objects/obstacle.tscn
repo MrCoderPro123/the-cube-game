@@ -1,0 +1,4 @@
+[gd_scene format=3 uid="uid://umxu4yunvspi"]
+
+[node name="Obstacle" type="RigidBody3D" unique_id=1677706139]
+collision_layer = 3

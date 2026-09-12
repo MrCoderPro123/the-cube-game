@@ -1,0 +1,156 @@
+[gd_scene format=3 uid="uid://c11alc8by727b"]
+
+[ext_resource type="Script" uid="uid://g8knwxxt1m7" path="res://Scripts/player.gd" id="1_y0qk3"]
+[ext_resource type="Material" uid="uid://b2gcqiq4cxhun" path="res://Assets/player_material.tres" id="2_3y5cq"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_n0qsc"]
+friction = 0.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_trpa2"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4t7ew"]
+
+[sub_resource type="GDScript" id="GDScript_3y5cq"]
+resource_name = "CoinsLbl"
+script/source = "extends Label
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	text = \"Coins: \" + str(GlobalValues.coins)
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	text = \"Coins: \" + str(GlobalValues.coins)
+"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x3ivu"]
+bg_color = Color(1, 1, 1, 0)
+
+[sub_resource type="Animation" id="Animation_3y5cq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:theme_override_styles/panel:bg_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Label:theme_override_colors/font_color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_2i4gt"]
+resource_name = "scene_transition"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:theme_override_styles/panel:bg_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Label:theme_override_colors/font_color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.6, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_0ad8t"]
+_data = {
+&"RESET": SubResource("Animation_3y5cq"),
+&"scene_transition": SubResource("Animation_2i4gt")
+}
+
+[node name="Player" type="RigidBody3D" unique_id=60632292]
+physics_material_override = SubResource("PhysicsMaterial_n0qsc")
+contact_monitor = true
+max_contacts_reported = 100
+script = ExtResource("1_y0qk3")
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=1496126741]
+material_override = ExtResource("2_3y5cq")
+mesh = SubResource("BoxMesh_trpa2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=969806673]
+shape = SubResource("BoxShape3D_4t7ew")
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=142237687]
+
+[node name="Control" type="Control" parent="UI" unique_id=1321660430]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CoinLbl" type="Label" parent="UI/Control" unique_id=787156070]
+layout_mode = 1
+offset_left = 50.0
+offset_top = 50.0
+offset_right = 225.0
+offset_bottom = 95.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 32
+text = "Coins: 1000"
+script = SubResource("GDScript_3y5cq")
+
+[node name="SceneTransition" type="Panel" parent="UI/Control" unique_id=157306962]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_x3ivu")
+
+[node name="Label" type="Label" parent="UI/Control/SceneTransition" unique_id=2112878]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -267.0
+offset_top = -49.5
+offset_right = 267.0
+offset_bottom = 49.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 0)
+theme_override_font_sizes/font_size = 72
+text = "Level Complete"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="scene_anim" type="AnimationPlayer" parent="UI/Control/SceneTransition" unique_id=1572422549]
+libraries/ = SubResource("AnimationLibrary_0ad8t")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
