@@ -16,3 +16,8 @@
 - Added A Proper Coin Mesh from Blender
 - Made the Menu Buttons Look Good
 - Added A Rotating Animation to Coin
+
+## Version 1.4
+
+- Added a Pause Menu
+- Minor Change to Level Transition (Showing the Level No Completed)

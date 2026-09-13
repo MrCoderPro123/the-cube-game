@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" uid="uid://g8knwxxt1m7" path="res://Scripts/player.gd" id="1_y0qk3"]
 [ext_resource type="Material" uid="uid://b2gcqiq4cxhun" path="res://Assets/player_material.tres" id="2_3y5cq"]
+[ext_resource type="StyleBox" uid="uid://e4xtusvx8rtn" path="res://Assets/button_normal.tres" id="3_x20fu"]
+[ext_resource type="StyleBox" uid="uid://cm728l0c0xwmh" path="res://Assets/button_pressed.tres" id="4_0ar0x"]
+[ext_resource type="StyleBox" uid="uid://dcisjbjk005pe" path="res://Assets/button_hover.tres" id="5_slvmq"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_n0qsc"]
 friction = 0.0
@@ -9,6 +12,36 @@ friction = 0.0
 [sub_resource type="BoxMesh" id="BoxMesh_trpa2"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_4t7ew"]
+
+[sub_resource type="GDScript" id="GDScript_2i4gt"]
+resource_name = "PauseHandelel"
+script/source = "extends CanvasLayer
+
+@onready var pause_btn: Button = $Control/PauseBtn
+@onready var popup_panel: Popup = $PopupPanel
+@onready var level_lbl: Label = $PopupPanel/LevelLbl
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	get_tree().paused = false
+	popup_panel.hide()
+	pause_btn.show()
+
+func _on_pause_btn_pressed() -> void:
+	popup_panel.show()
+	get_tree().paused = true
+	pause_btn.hide()
+	level_lbl.text = \"Current Level: \" + str(GlobalValues.get_level() + 1)
+
+func _on_resume_btn_pressed() -> void:
+	get_tree().paused = false
+	popup_panel.hide()
+	pause_btn.show()
+
+func _on_menu_btn_pressed() -> void:
+	get_tree().paused = false
+	LevelManager.switch_to_main_menu()
+"
 
 [sub_resource type="GDScript" id="GDScript_3y5cq"]
 resource_name = "CoinsLbl"
@@ -45,7 +78,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Label:theme_override_colors/font_color")
+tracks/1/path = NodePath("TransitionLbl:theme_override_colors/font_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -72,7 +105,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Label:theme_override_colors/font_color")
+tracks/1/path = NodePath("TransitionLbl:theme_override_colors/font_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -88,6 +121,9 @@ _data = {
 &"scene_transition": SubResource("Animation_2i4gt")
 }
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lh655"]
+bg_color = Color(0.6, 0.6, 0.6, 0.24313726)
+
 [node name="Player" type="RigidBody3D" unique_id=60632292]
 physics_material_override = SubResource("PhysicsMaterial_n0qsc")
 contact_monitor = true
@@ -102,6 +138,7 @@ mesh = SubResource("BoxMesh_trpa2")
 shape = SubResource("BoxShape3D_4t7ew")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=142237687]
+script = SubResource("GDScript_2i4gt")
 
 [node name="Control" type="Control" parent="UI" unique_id=1321660430]
 layout_mode = 3
@@ -131,7 +168,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_x3ivu")
 
-[node name="Label" type="Label" parent="UI/Control/SceneTransition" unique_id=2112878]
+[node name="TransitionLbl" type="Label" parent="UI/Control/SceneTransition" unique_id=2112878]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -153,4 +190,93 @@ vertical_alignment = 1
 [node name="scene_anim" type="AnimationPlayer" parent="UI/Control/SceneTransition" unique_id=1572422549]
 libraries/ = SubResource("AnimationLibrary_0ad8t")
 
+[node name="PauseBtn" type="Button" parent="UI/Control" unique_id=1951397390]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -50.0
+offset_bottom = 50.0
+grow_horizontal = 0
+theme_override_styles/normal = ExtResource("3_x20fu")
+theme_override_styles/pressed = ExtResource("4_0ar0x")
+theme_override_styles/hover = ExtResource("5_slvmq")
+text = "❚❚"
+
+[node name="PopupPanel" type="Popup" parent="UI" unique_id=772614844]
+process_mode = 3
+oversampling_override = 1.0
+initial_position = 2
+size = Vector2i(300, 400)
+visible = true
+
+[node name="Panel" type="Panel" parent="UI/PopupPanel" unique_id=860164733]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_lh655")
+
+[node name="Label" type="Label" parent="UI/PopupPanel" unique_id=2053729450]
+offset_right = 300.0
+offset_bottom = 400.0
+text = "Game Paused"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="UI/PopupPanel" unique_id=1115665169]
+offset_right = 300.0
+offset_bottom = 50.0
+
+[node name="ResumeBtn" type="Button" parent="UI/PopupPanel" unique_id=555540125]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -100.0
+offset_right = 50.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = ExtResource("3_x20fu")
+theme_override_styles/pressed = ExtResource("4_0ar0x")
+theme_override_styles/hover = ExtResource("5_slvmq")
+text = "Resume"
+
+[node name="MenuBtn" type="Button" parent="UI/PopupPanel" unique_id=1721346481]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = ExtResource("3_x20fu")
+theme_override_styles/pressed = ExtResource("4_0ar0x")
+theme_override_styles/hover = ExtResource("5_slvmq")
+text = "Main Menu"
+
+[node name="LevelLbl" type="Label" parent="UI/PopupPanel" unique_id=1845578423]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -61.0
+offset_top = -100.0
+offset_right = 61.00003
+offset_bottom = -77.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Current Level: 0"
+horizontal_alignment = 1
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="pressed" from="UI/Control/PauseBtn" to="UI" method="_on_pause_btn_pressed"]
+[connection signal="pressed" from="UI/PopupPanel/ResumeBtn" to="UI" method="_on_resume_btn_pressed"]
+[connection signal="pressed" from="UI/PopupPanel/MenuBtn" to="UI" method="_on_menu_btn_pressed"]
