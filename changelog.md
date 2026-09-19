@@ -21,3 +21,7 @@
 
 - Added a Pause Menu
 - Minor Change to Level Transition (Showing the Level No Completed)
+
+## Version 1.5
+
+- Added a Endless Game Mode

@@ -2,6 +2,7 @@ extends Control
 
 const LEVEL_1 = preload("uid://8ggbt2seeq2v")
 const SHOP_MENU = preload("uid://hk6vb8po2bsk")
+const ENDLESS = preload("uid://d07bfjcw5xw8r")
 
 func _on_play_btn_pressed() -> void:
 	#GlobalValues.set_coins(0)
@@ -14,3 +15,6 @@ func _on_shop_btn_pressed() -> void:
 
 func _on_quit_btn_pressed() -> void:
 	get_tree().quit()
+
+func _on_endless_btn_pressed() -> void:
+	get_tree().change_scene_to_packed(ENDLESS)
