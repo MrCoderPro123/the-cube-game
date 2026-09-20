@@ -10,7 +10,8 @@ var is_moving = true
 @onready var mesh: MeshInstance3D = $Mesh
 @onready var transition_lbl: Label = $UI/Control/SceneTransition/TransitionLbl
 @onready var pause_btn: Button = $UI/Control/PauseBtn
-@onready var virtual_joystick: VirtualJoystick = $UI/Control/VirtualJoystick
+@onready var left_move_btn: Button = $UI/Control/LeftMoveBtn
+@onready var right_move_btn: Button = $UI/Control/RightMoveBtn
 
 var PLAYER_MATERIAL: StandardMaterial3D = preload("uid://b2gcqiq4cxhun")
 
@@ -19,8 +20,12 @@ func _ready() -> void:
 	is_moving = true
 	scene_anim.play("RESET")
 	PLAYER_MATERIAL.albedo_color = GlobalValues.get_player_color()
-	if OS.get_name() == "Web":
-		virtual_joystick.visibility_mode = VirtualJoystick.VISIBILITY_ALWAYS
+	
+	left_move_btn.button_down.connect(func(): Input.action_press("move_left"))
+	left_move_btn.button_up.connect(func(): Input.action_release("move_left"))
+	right_move_btn.button_down.connect(func(): Input.action_press("move_right"))
+	right_move_btn.button_up.connect(func(): Input.action_release("move_right"))
+	
 	
 
 func _physics_process(delta: float) -> void:

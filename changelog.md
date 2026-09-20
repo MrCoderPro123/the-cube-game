@@ -25,3 +25,9 @@
 ## Version 1.5
 
 - Added a Endless Game Mode
+
+### Version 1.5.1
+ 
+- Minor BugFixes and Adjusments
+- Added Touch Buttons for Movement
+- Added a Readme

@@ -25,13 +25,13 @@ func _process(delta: float) -> void:
 func _on_buy_pressed():
 	if (GlobalValues.get_purchased_colors() as Array[Color]).has(color):
 		GlobalValues.set_player_color(color)
-		LevelManager.start_from_level_one()
+		LevelManager.switch_to_main_menu()
 	else:
 		if GlobalValues.get_coins() >= price:
 			GlobalValues.set_coins(GlobalValues.get_coins() - price)
 			GlobalValues.add_purchased_color(color)
 			GlobalValues.set_player_color(color)
 			GlobalValues.save_data(GlobalValues.get_coins(), GlobalValues.get_player_color(), GlobalValues.get_purchased_colors())
-			LevelManager.start_from_level_one()
+			LevelManager.switch_to_main_menu()
 		else:
 			not_enough_coins.popup()
